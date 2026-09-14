@@ -1,0 +1,14 @@
+# ABM blitz — concentrated 4-week push against a named target account list.
+# Custom landing page per tier-1 account, coordinated social and direct
+# outreach.
+crmcare: campaign/0.1
+name: ABM blitz
+brief:
+  objective: Pipeline acceleration
+  audience: Named target account list — tier-1 (top 20) get personalised treatment; tier-2 (next 100) get segmented but not 1:1 content
+  keyMessage: We've been watching [account] — here's what we think you're trying to solve, and a specific point of view on it.
+  segment: Target Account List — Q[X] strategic accounts
+  tone: Warm & relationship-first
+  context: "Tier-1: SDR-led 1:1 sequence with custom landing page per account, executive direct mail piece. Tier-2: industry-segmented email + LinkedIn ads. Sales and marketing hold a weekly sync to triage account engagement signals during the blitz."
+channels: [Email, LinkedIn, Display Ads, Landing Page, Direct Mail]
+tags: [template, abm]

@@ -1,0 +1,558 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://crm.care/api/v1/campaign-spec/schema",
+  "title": "crm.care campaign spec",
+  "description": "A campaign as a document: campaign/0.1. What the campaign is — brief, channels, sequence, segments, assets, guardrails — never what happened to it.",
+  "type": "object",
+  "properties": {
+    "crmcare": {
+      "type": "string",
+      "const": "campaign/0.1",
+      "description": "The spec version."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "brief": {
+      "type": "object",
+      "properties": {
+        "objective": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000,
+          "description": "What it should achieve — ideally with a number."
+        },
+        "audience": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "keyMessage": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000,
+          "description": "The one thing the audience should believe afterwards."
+        },
+        "segment": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "tone": {
+          "type": "string",
+          "maxLength": 60
+        },
+        "context": {
+          "type": "string",
+          "maxLength": 8000
+        },
+        "language": {
+          "type": "string",
+          "enum": [
+            "en",
+            "es"
+          ]
+        }
+      },
+      "required": [
+        "objective",
+        "audience",
+        "keyMessage"
+      ],
+      "additionalProperties": false
+    },
+    "channels": {
+      "minItems": 1,
+      "maxItems": 11,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "Email",
+          "LinkedIn",
+          "X",
+          "Facebook",
+          "Instagram",
+          "Webinar",
+          "Landing Page",
+          "Paid Search",
+          "Display Ads",
+          "Conference",
+          "Direct Mail"
+        ]
+      }
+    },
+    "tags": {
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 60
+      }
+    },
+    "plan": {
+      "description": "The strategy plan, Markdown.",
+      "type": "string",
+      "maxLength": 200000
+    },
+    "guardrails": {
+      "type": "object",
+      "properties": {
+        "autoPost": {
+          "description": "Scheduled LinkedIn posts publish themselves.",
+          "type": "boolean"
+        },
+        "imageGenerationCap": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 500
+        }
+      },
+      "additionalProperties": false
+    },
+    "segments": {
+      "maxItems": 50,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,63}$",
+            "description": "A name local to this spec, so a calendar entry can point at this item."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "description": {
+            "default": "",
+            "type": "string",
+            "maxLength": 2000
+          },
+          "rules": {
+            "default": [],
+            "maxItems": 40,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "operator": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 60
+                },
+                "value": {
+                  "type": "string",
+                  "maxLength": 500
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "crm",
+                    "apollo"
+                  ]
+                }
+              },
+              "required": [
+                "field",
+                "operator",
+                "value"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "estimatedSize": {
+            "type": "string",
+            "maxLength": 300
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "rules"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "emails": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,63}$",
+            "description": "A name local to this spec, so a calendar entry can point at this item."
+          },
+          "role": {
+            "description": "Where it sits in the sequence: \"launch\", \"follow-up\", \"final reminder\".",
+            "type": "string",
+            "maxLength": 60
+          },
+          "position": {
+            "description": "A label for its position, shown in the app.",
+            "type": "string",
+            "maxLength": 60
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "preview": {
+            "default": "",
+            "description": "The preheader.",
+            "type": "string",
+            "maxLength": 300
+          },
+          "blocks": {
+            "description": "The body, as blocks. The HTML is rendered in the workspace's own theme.",
+            "maxItems": 60,
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "const": "heading"
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 300
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "const": "paragraph"
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 4000
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "const": "cta"
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 120
+                    },
+                    "urlHint": {
+                      "description": "Placeholder URL; the real link is set in the marketing platform.",
+                      "type": "string",
+                      "maxLength": 2000
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "const": "signoff"
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 600
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "html": {
+            "description": "Full HTML, only when there are no blocks.",
+            "type": "string",
+            "maxLength": 200000
+          },
+          "hero": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string",
+                "maxLength": 4000000,
+                "description": "An https URL, or a base64 data URL of an image (up to 4 MB)."
+              },
+              "alt": {
+                "type": "string",
+                "maxLength": 300
+              }
+            },
+            "required": [
+              "url"
+            ],
+            "additionalProperties": false
+          },
+          "scheduledFor": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?(Z|[+-]\\d{2}:\\d{2})?)?$"
+          },
+          "rationale": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "subject",
+          "preview"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "social": {
+      "maxItems": 200,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,63}$",
+            "description": "A name local to this spec, so a calendar entry can point at this item."
+          },
+          "platform": {
+            "type": "string",
+            "enum": [
+              "LinkedIn",
+              "X",
+              "Facebook",
+              "Instagram"
+            ]
+          },
+          "copy": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 6000
+          },
+          "hashtags": {
+            "maxItems": 30,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            }
+          },
+          "imagePrompt": {
+            "type": "string",
+            "maxLength": 4000
+          },
+          "image": {
+            "description": "An image already made for this post.",
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string",
+                "maxLength": 4000000,
+                "description": "An https URL, or a base64 data URL of an image (up to 4 MB)."
+              },
+              "alt": {
+                "type": "string",
+                "maxLength": 300
+              }
+            },
+            "required": [
+              "url"
+            ],
+            "additionalProperties": false
+          },
+          "references": {
+            "description": "Media library images to generate from. Ids that are not in the target workspace are dropped with a warning.",
+            "maxItems": 4,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "assetId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                }
+              },
+              "required": [
+                "assetId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "scheduledFor": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?(Z|[+-]\\d{2}:\\d{2})?)?$"
+          },
+          "scheduledTime": {
+            "type": "string",
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+          },
+          "tone": {
+            "type": "string",
+            "maxLength": 60
+          }
+        },
+        "required": [
+          "platform",
+          "copy"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "calendar": {
+      "maxItems": 400,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "social",
+              "email",
+              "webinar",
+              "landing",
+              "asset"
+            ]
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "channel": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
+          },
+          "date": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?(Z|[+-]\\d{2}:\\d{2})?)?$"
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 4000
+          },
+          "ref": {
+            "description": "The key of the email or post this entry schedules.",
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+          }
+        },
+        "required": [
+          "kind",
+          "label",
+          "channel",
+          "date"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "assets": {
+      "maxItems": 50,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,63}$",
+            "description": "A name local to this spec, so a calendar entry can point at this item."
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "white-paper",
+              "guide",
+              "checklist",
+              "playbook",
+              "landing-page",
+              "press-release",
+              "webinar-kit",
+              "video-script",
+              "faq"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "abstract": {
+            "default": "",
+            "type": "string",
+            "maxLength": 2000
+          },
+          "body": {
+            "type": "string",
+            "maxLength": 200000,
+            "description": "Markdown."
+          }
+        },
+        "required": [
+          "kind",
+          "title",
+          "abstract",
+          "body"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "x-crmcare": {
+      "description": "Provenance written on export; ignored on import.",
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {}
+    }
+  },
+  "required": [
+    "crmcare",
+    "name",
+    "brief",
+    "channels"
+  ],
+  "additionalProperties": false
+}

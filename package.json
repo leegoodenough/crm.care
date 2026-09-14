@@ -1,0 +1,68 @@
+{
+  "name": "crmcare",
+  "version": "0.1.0",
+  "description": "The crm.care campaign spec (campaign/0.1): the schema and types, a typed builder, a client for the REST twin, and the crmcare CLI — validate, plan, import, export and apply a campaign as a file.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./schema.json": "./schema.json",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "crmcare": "./bin/crmcare.mjs"
+  },
+  "files": [
+    "dist",
+    "bin",
+    "templates",
+    "schema.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "yaml": "^2.9.1",
+    "zod": "^4.6.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2"
+  },
+  "keywords": [
+    "crm.care",
+    "campaign",
+    "marketing",
+    "campaign-as-code",
+    "spec",
+    "yaml",
+    "json-schema",
+    "agents",
+    "mcp",
+    "hubspot",
+    "account-engagement",
+    "cli"
+  ],
+  "homepage": "https://crm.care/docs/spec",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leegoodenough/crm.care.git"
+  },
+  "bugs": {
+    "url": "https://github.com/leegoodenough/crm.care/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

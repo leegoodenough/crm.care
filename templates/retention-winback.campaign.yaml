@@ -1,0 +1,12 @@
+# Retention winback — re-engage lapsed or at-risk customers with a value
+# reminder, a what's-new digest, and a low-friction reactivation offer.
+crmcare: campaign/0.1
+name: Retention winback
+brief:
+  objective: Re-engagement
+  audience: "Existing customers who have lapsed in usage or engagement over the last 90+ days; secondary audience: cancelled customers within the last 6 months"
+  keyMessage: We've shipped a lot since you last looked — here's what changed, and a quick way back in.
+  tone: Warm & relationship-first
+  context: "3-week sequence: reminder of value (week 1), what's new digest (week 2), reactivation offer or call-to-action (week 3). Avoids hard sells; the CTA is a low-friction touch — book a 15-min update with your CSM, watch a 2-min what's-new video, etc."
+channels: [Email, LinkedIn]
+tags: [template, retention]

@@ -1,0 +1,27 @@
+# The public checkout: build the package and run its own tests on every push,
+# and the conformance suite against crm.care once a day (public checks only
+# unless a CRMCARE_TOKEN secret is set — a workspace token for a test
+# workspace; never a customer's).
+name: ci
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "17 6 * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: npm run build
+      - run: npm test
+      - name: conformance against crm.care
+        env:
+          CRMCARE_TOKEN: ${{ secrets.CRMCARE_TOKEN }}
+        run: node bin/crmcare.mjs conformance --host https://crm.care

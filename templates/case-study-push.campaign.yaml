@@ -1,0 +1,13 @@
+# Case study push — take one published case study and squeeze every channel
+# out of it: emails, social, paid retargeting, an excerpted blog post, and a
+# sales enablement clip.
+crmcare: campaign/0.1
+name: Case study push
+brief:
+  objective: Pipeline acceleration
+  audience: Sales-qualified leads in vertical/segment matching the case-study customer; existing pipeline in mid-funnel stages
+  keyMessage: Here's exactly how [customer] used us to deliver [quantified outcome] — read the full story.
+  tone: Professional & data-driven
+  context: 2-week campaign window. Case study lives on the landing page; everything else points at it. Sales reps get a Slack-shareable excerpt to drop into open opportunities. Paid retargeting fires against site visitors who didn't convert in the last 30 days.
+channels: [Email, LinkedIn, Display Ads, Landing Page]
+tags: [template, case-study]

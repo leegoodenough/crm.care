@@ -1,0 +1,13 @@
+# Product launch — multi-channel launch announcement across owned, earned,
+# and paid surfaces. Built around a launch day with pre-launch tease and
+# post-launch reinforcement.
+crmcare: campaign/0.1
+name: Product launch
+brief:
+  objective: Product launch
+  audience: Existing customers + warm prospects in target segments who would benefit from the new capability
+  keyMessage: Today we're shipping [feature/product] — here's the problem it solves and why it matters now.
+  tone: Bold & disruptive
+  context: "Launch day is the focal point: pre-launch tease (1 week), launch announcement (day 0), reinforcement and case stories (week +1, +2). Includes a launch landing page with demo CTA. Paid budget runs concurrently for two weeks."
+channels: [Email, LinkedIn, X, Landing Page, Paid Search, Display Ads]
+tags: [template, launch]

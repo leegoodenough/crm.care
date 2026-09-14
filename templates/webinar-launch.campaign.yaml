@@ -1,0 +1,12 @@
+# Webinar launch — promote a single webinar from 4 weeks out through the
+# day-of, with registration emails, social drumbeat, and a recap follow-up.
+crmcare: campaign/0.1
+name: Webinar launch
+brief:
+  objective: Lead generation
+  audience: B2B marketing operations and demand-gen leaders evaluating their tooling stack
+  keyMessage: A 45-minute working session on how to wire Account Engagement into a closed-loop revenue motion — practical patterns, not vendor pitch.
+  tone: Consultative & educational
+  context: "4-week pre-event runway: invite → reminder cadence → live → on-demand follow-up. Weekly LinkedIn posts from the speaker. The webinar is the campaign's centre of gravity — every other asset routes traffic to it."
+channels: [Email, LinkedIn, X, Webinar]
+tags: [template, webinar]
