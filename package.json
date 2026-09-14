@@ -15,7 +15,7 @@
     "./package.json": "./package.json"
   },
   "bin": {
-    "crmcare": "./bin/crmcare.mjs"
+    "crmcare": "bin/crmcare.mjs"
   },
   "files": [
     "dist",
