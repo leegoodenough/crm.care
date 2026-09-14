@@ -219,6 +219,17 @@ export class CrmCare {
     this.fetchImpl = opts.fetch;
   }
 
+  /** A header value must be plain ASCII; a placeholder pasted literally (ccr_…) is the usual cause. */
+  private assertTokenUsable(): void {
+    if (this.token && !/^[\x21-\x7e]+$/.test(this.token)) {
+      throw new CrmCareError(
+        "The token contains a character that is not plain ASCII — was a placeholder such as ccr_… pasted literally? Use the token exactly as minted.",
+        401,
+        null
+      );
+    }
+  }
+
   private async request(
     method: "GET" | "POST",
     path: string,
@@ -231,6 +242,7 @@ export class CrmCare {
         null
       );
     }
+    if (opts.auth) this.assertTokenUsable();
     const headers: Record<string, string> = { accept: "application/json", ...(opts.headers ?? {}) };
     if (opts.body !== undefined) headers["content-type"] = opts.contentType ?? "application/json";
     if (opts.auth) headers.authorization = `Bearer ${this.token}`;

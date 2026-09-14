@@ -288,6 +288,14 @@ export const CHECKS: Check[] = [
 
 export async function runConformance(opts: ConformanceOptions): Promise<ConformanceReport> {
   const host = opts.host.replace(/\/$/, "");
+  // Say it once, not once per check.
+  if (opts.token && !/^[\x21-\x7e]+$/.test(opts.token.trim())) {
+    throw new CrmCareError(
+      "The token contains a character that is not plain ASCII — was a placeholder such as ccr_… pasted literally? Use the token exactly as minted.",
+      401,
+      null
+    );
+  }
   const fetchImpl = opts.fetch ?? globalThis.fetch;
   const ctx: Ctx = {
     host,
