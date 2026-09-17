@@ -15,6 +15,7 @@
 export * from "./generated/schema.js";
 export * from "./generated/text.js";
 export { GATED_ASSET_KINDS, type GatedAssetKind } from "./generated/asset-kinds.js";
+export { DEFAULT_MOTIFS_TO_AVOID, VISUAL_TERRITORIES, VISUAL_TERRITORY_KEYS, territoryDef, type TerritoryDef } from "./generated/visual-territory-catalogue.js";
 export * from "./builder.js";
 export * from "./client.js";
 export * from "./templates.js";

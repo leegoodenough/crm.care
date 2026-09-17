@@ -92,8 +92,8 @@ Set `CRMCARE_TOKEN` (and `CRMCARE_HOST` for another host), or pass
 
 ## The spec
 
-What a campaign *is* — brief, channels, plan, guardrails, segments, emails,
-social, calendar, assets — never what happened to it. Strict: an unknown
+What a campaign *is* — brief, channels, plan, guardrails, the visual territory its images live in, segments,
+emails, social, calendar, assets — never what happened to it. Strict: an unknown
 key is an error. The schema is generated from the same source the server
 validates with, and served at `https://crm.care/api/v1/campaign-spec/schema`;
 `schema.json` in this package is the same document. The full description,

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://crm.care/api/v1/campaign-spec/schema",
   "title": "crm.care campaign spec",
-  "description": "A campaign as a document: campaign/0.1. What the campaign is — brief, channels, sequence, segments, assets, guardrails — never what happened to it.",
+  "description": "A campaign as a document: campaign/0.1. What the campaign is — brief, channels, visual territory, sequence, segments, assets, guardrails — never what happened to it.",
   "type": "object",
   "properties": {
     "crmcare": {
@@ -110,6 +110,69 @@
           "maximum": 500
         }
       },
+      "additionalProperties": false
+    },
+    "visual": {
+      "description": "The world the campaign's images live in. Chosen from the brief when absent; pinned when named.",
+      "type": "object",
+      "properties": {
+        "territory": {
+          "type": "string",
+          "enum": [
+            "still-life",
+            "documentary",
+            "architecture",
+            "material",
+            "wayfinding",
+            "typographic",
+            "analogue",
+            "nature-systems",
+            "engineered",
+            "miniature",
+            "optics",
+            "motion",
+            "everyday",
+            "geometric",
+            "data-physical",
+            "workshop"
+          ],
+          "description": "The world the images live in — one of: still-life (Editorial still life), documentary (Documentary moment), architecture (Architecture and structure), material (Macro material), wayfinding (Maps and wayfinding), typographic (Typographic poster), analogue (Paper and analogue tools), nature-systems (Nature as a system), engineered (Engineered precision), miniature (Diorama and miniature), optics (Light and optics), motion (Motion and timing), everyday (Domestic and everyday), geometric (Abstract geometric field), data-physical (Data made physical), workshop (Workshop and craft)."
+        },
+        "motif": {
+          "description": "The concrete subject inside the territory, one line: a thing, a place, a material, a moment. Defaults to the territory's essence.",
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 300
+        },
+        "rationale": {
+          "description": "Why this world serves the key message, one sentence.",
+          "type": "string",
+          "maxLength": 400
+        },
+        "seeds": {
+          "description": "Subjects inside the territory a sequence of posts can draw on, one per post.",
+          "maxItems": 5,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          }
+        },
+        "avoid": {
+          "description": "Motifs the images must never use, on top of the defaults every campaign avoids (screens, desks, diagrams). Up to 16.",
+          "maxItems": 16,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          }
+        }
+      },
+      "required": [
+        "territory"
+      ],
       "additionalProperties": false
     },
     "segments": {

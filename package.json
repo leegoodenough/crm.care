@@ -1,6 +1,6 @@
 {
   "name": "crmcare",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "The crm.care campaign spec (campaign/0.1): the schema and types, a typed builder, a client for the REST twin, and the crmcare CLI — validate, plan, import, export and apply a campaign as a file.",
   "license": "MIT",
   "type": "module",

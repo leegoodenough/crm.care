@@ -35,6 +35,8 @@ export interface SpecSummary {
   name: string;
   channels: string[];
   counts: { emails: number; social: number; calendar: number; segments: number; assets: number };
+  /** The territory key the spec pins, when it names one (campaign/0.1, V.3). */
+  visualTerritory?: string;
   wouldPublish: false;
 }
 

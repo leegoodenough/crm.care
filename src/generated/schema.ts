@@ -11,8 +11,8 @@
 // wire form.
 //
 // The spec describes what a campaign IS — the brief, the channels, the
-// sequence, the segments, the assets, the guardrails — never what happened
-// to it. Status, performance, learnings, CRM links and image-generation
+// sequence, the segments, the assets, the guardrails, the visual world its
+// images live in — never what happened to it. Status, performance, learnings, CRM links and image-generation
 // counters are outcomes and state; they stay on the row. An `x-crmcare`
 // block carries provenance on export and is ignored on import.
 //
@@ -22,6 +22,7 @@
 
 import { z } from "zod";
 import { GATED_ASSET_KINDS } from "./asset-kinds.js";
+import { SCREEN_MOTIF_PATTERN, VISUAL_TERRITORIES, VISUAL_TERRITORY_KEYS } from "./visual-territory-catalogue.js";
 
 export const CAMPAIGN_SPEC_VERSION = "campaign/0.1" as const;
 
@@ -188,6 +189,33 @@ export const GuardrailsSchema = z
   })
   .strict();
 
+/**
+ * Phase 67 (V.3) — the visual territory: the world the campaign's images
+ * live in. Without it a campaign is chosen one on its first generation, from
+ * the catalogue, unlike the workspace's recent campaigns (lib/visual-
+ * territory). A spec that names one pins it: no chooser runs, every image
+ * the campaign makes sits inside it, and the export carries it.
+ */
+export const VisualSpecSchema = z
+  .object({
+    territory: z
+      .enum(VISUAL_TERRITORY_KEYS)
+      .describe(`The world the images live in — one of: ${VISUAL_TERRITORIES.map((t) => `${t.key} (${t.name})`).join(", ")}.`),
+    motif: z
+      .string()
+      .trim()
+      .min(8, "a motif is a line, not a word")
+      .max(300)
+      .refine((m) => !SCREEN_MOTIF_PATTERN.test(m), "a motif is physical and specific — never a screen, laptop, keyboard, monitor, dashboard or isometric diagram")
+      .optional()
+      .describe("The concrete subject inside the territory, one line: a thing, a place, a material, a moment. Defaults to the territory's essence."),
+    rationale: z.string().trim().max(400).optional().describe("Why this world serves the key message, one sentence."),
+    seeds: z.array(z.string().trim().min(1).max(300)).max(5).optional().describe("Subjects inside the territory a sequence of posts can draw on, one per post."),
+    avoid: z.array(z.string().trim().min(1).max(300)).max(16).optional().describe("Motifs the images must never use, on top of the defaults every campaign avoids (screens, desks, diagrams). Up to 16.")
+  })
+  .strict();
+
+
 export const CampaignSpecSchema = z
   .object({
     crmcare: z.literal(CAMPAIGN_SPEC_VERSION).describe("The spec version."),
@@ -197,6 +225,7 @@ export const CampaignSpecSchema = z
     tags: z.array(z.string().trim().min(1).max(60)).max(30).optional(),
     plan: z.string().max(200_000).optional().describe("The strategy plan, Markdown."),
     guardrails: GuardrailsSchema.optional(),
+    visual: VisualSpecSchema.optional().describe("The world the campaign's images live in. Chosen from the brief when absent; pinned when named."),
     segments: z.array(SegmentSpecSchema).max(50).optional(),
     emails: z.array(EmailSpecSchema).max(100).optional(),
     social: z.array(SocialSpecSchema).max(200).optional(),
@@ -245,6 +274,7 @@ export type SocialSpec = z.infer<typeof SocialSpecSchema>;
 export type SegmentSpec = z.infer<typeof SegmentSpecSchema>;
 export type CalendarSpec = z.infer<typeof CalendarSpecSchema>;
 export type AssetSpec = z.infer<typeof AssetSpecSchema>;
+export type VisualSpec = z.infer<typeof VisualSpecSchema>;
 
 export interface SpecIssue {
   /** JSON-pointer-ish path: "emails.0.subject". */
@@ -274,7 +304,7 @@ export function campaignSpecJsonSchema(): Record<string, unknown> {
     $schema: "https://json-schema.org/draft/2020-12/schema",
     $id: CAMPAIGN_SPEC_SCHEMA_URL,
     title: "crm.care campaign spec",
-    description: `A campaign as a document: ${CAMPAIGN_SPEC_VERSION}. What the campaign is — brief, channels, sequence, segments, assets, guardrails — never what happened to it.`,
+    description: `A campaign as a document: ${CAMPAIGN_SPEC_VERSION}. What the campaign is — brief, channels, visual territory, sequence, segments, assets, guardrails — never what happened to it.`,
     ...generated
   };
 }
