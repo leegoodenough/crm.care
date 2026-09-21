@@ -134,9 +134,10 @@
             "everyday",
             "geometric",
             "data-physical",
-            "workshop"
+            "workshop",
+            "technical-artefact"
           ],
-          "description": "The world the images live in — one of: still-life (Editorial still life), documentary (Documentary moment), architecture (Architecture and structure), material (Macro material), wayfinding (Maps and wayfinding), typographic (Typographic poster), analogue (Paper and analogue tools), nature-systems (Nature as a system), engineered (Engineered precision), miniature (Diorama and miniature), optics (Light and optics), motion (Motion and timing), everyday (Domestic and everyday), geometric (Abstract geometric field), data-physical (Data made physical), workshop (Workshop and craft)."
+          "description": "The world the images live in — one of: still-life (Editorial still life), documentary (Documentary moment), architecture (Architecture and structure), material (Macro material), wayfinding (Maps and wayfinding), typographic (Typographic poster), analogue (Paper and analogue tools), nature-systems (Nature as a system), engineered (Engineered precision), miniature (Diorama and miniature), optics (Light and optics), motion (Motion and timing), everyday (Domestic and everyday), geometric (Abstract geometric field), data-physical (Data made physical), workshop (Workshop and craft), technical-artefact (Technical artefact)."
         },
         "motif": {
           "description": "The concrete subject inside the territory, one line: a thing, a place, a material, a moment. Defaults to the territory's essence.",

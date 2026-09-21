@@ -22,7 +22,7 @@
 
 import { z } from "zod";
 import { GATED_ASSET_KINDS } from "./asset-kinds.js";
-import { SCREEN_MOTIF_PATTERN, VISUAL_TERRITORIES, VISUAL_TERRITORY_KEYS } from "./visual-territory-catalogue.js";
+import { SCREEN_MOTIF_PATTERN, VISUAL_TERRITORIES, VISUAL_TERRITORY_KEYS, territoryAllowsInterface } from "./visual-territory-catalogue.js";
 
 export const CAMPAIGN_SPEC_VERSION = "campaign/0.1" as const;
 
@@ -206,7 +206,6 @@ export const VisualSpecSchema = z
       .trim()
       .min(8, "a motif is a line, not a word")
       .max(300)
-      .refine((m) => !SCREEN_MOTIF_PATTERN.test(m), "a motif is physical and specific — never a screen, laptop, keyboard, monitor, dashboard or isometric diagram")
       .optional()
       .describe("The concrete subject inside the territory, one line: a thing, a place, a material, a moment. Defaults to the territory's essence."),
     rationale: z.string().trim().max(400).optional().describe("Why this world serves the key message, one sentence."),
@@ -238,6 +237,17 @@ export const CampaignSpecSchema = z
   })
   .strict()
   .superRefine((spec, ctx) => {
+    // A motif is physical and specific. The exception is the territory whose
+    // subject is the software itself, which would otherwise be unable to name
+    // what it depicts — checked here rather than on the field because it
+    // depends on the territory beside it.
+    if (spec.visual?.motif && !territoryAllowsInterface(spec.visual.territory) && SCREEN_MOTIF_PATTERN.test(spec.visual.motif)) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["visual", "motif"],
+        message: `a motif is physical and specific — never a screen, laptop, keyboard, monitor, dashboard or isometric diagram. To picture the product itself, use the "technical-artefact" territory.`
+      });
+    }
     const seen = new Map<string, string>();
     const lists: Array<[string, Array<{ key?: string }> | undefined]> = [
       ["emails", spec.emails],

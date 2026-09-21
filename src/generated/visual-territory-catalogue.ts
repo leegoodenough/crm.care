@@ -14,6 +14,12 @@
 export interface TerritoryDef {
   key: string;
   name: string;
+  /**
+   * True when this territory may name an interface in its motif. Only the
+   * territory whose subject IS the software is exempt from SCREEN_MOTIF_PATTERN;
+   * everywhere else the ban is what stops every campaign looking the same.
+   */
+  allowsInterface?: boolean;
   /** What the pictures are, in a sentence. */
   essence: string;
   /** The briefs it suits. */
@@ -37,7 +43,8 @@ export const VISUAL_TERRITORIES: TerritoryDef[] = [
   { key: "everyday", name: "Domestic and everyday", essence: "A kitchen table, a commute, a corner shop, a garden shed — the idea landing in ordinary life.", suits: "Re-engagement, warmth, plain-English positioning." },
   { key: "geometric", name: "Abstract geometric field", essence: "Repeated forms, grids, tessellations, one deliberate break in the pattern — no objects, no screens.", suits: "Segmentation, patterns, data at scale." },
   { key: "data-physical", name: "Data made physical", essence: "Real objects sorted, stacked or arranged so they read as a chart — coins, tiles, fruit, timber — never a chart drawn by software.", suits: "Results, comparisons, attribution, pricing." },
-  { key: "workshop", name: "Workshop and craft", essence: "Hands at a bench with tools and materials — carpentry, ceramics, letterpress, tailoring — the making, not the machine.", suits: "Building, customisation, agencies, services." }
+  { key: "workshop", name: "Workshop and craft", essence: "Hands at a bench with tools and materials — carpentry, ceramics, letterpress, tailoring — the making, not the machine.", suits: "Building, customisation, agencies, services." },
+  { key: "technical-artefact", name: "Technical artefact", essence: "The product's own output treated as a designed object — a directory entry, a config line, a version tag, a release note, a label on a case — set and lit like print, never a stock screenshot of an app.", suits: "Integrations, connectors, APIs, developer products, directory listings, releases.", allowsInterface: true }
 ];
 
 /** The motifs every campaign starts by avoiding — the ones the generator drew by default. */
@@ -57,6 +64,11 @@ export const VISUAL_TERRITORY_KEYS = VISUAL_TERRITORIES.map((t) => t.key) as [st
 
 /** A motif that names the pictures the territories exist to replace; the chooser's parser and the spec refuse it alike. */
 export const SCREEN_MOTIF_PATTERN = /\b(laptop|keyboard|monitor|screen|dashboard|isometric)\b/i;
+
+/** True when this territory's motif may name an interface. See TerritoryDef.allowsInterface. */
+export function territoryAllowsInterface(key: string): boolean {
+  return territoryDef(key)?.allowsInterface === true;
+}
 
 export function territoryDef(key: string): TerritoryDef | undefined {
   return VISUAL_TERRITORIES.find((t) => t.key === key);
