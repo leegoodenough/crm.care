@@ -198,12 +198,25 @@ export const GuardrailsSchema = z
  * the catalogue, unlike the workspace's recent campaigns (lib/visual-
  * territory). A spec that names one pins it: no chooser runs, every image
  * the campaign makes sits inside it, and the export carries it.
+ *
+ * The "website" world follows a site rather than a subject, so it carries
+ * one: `site`, kept on the row as the territory's source. Without it the
+ * import follows the workspace's own website from Brand voice, which only
+ * the import can see, so that rule lives there (lib/campaign-spec/convert
+ * specSiteFor), not here.
  */
 export const VisualSpecSchema = z
   .object({
     territory: z
       .enum(VISUAL_TERRITORY_KEYS)
       .describe(`The world the images live in — one of: ${VISUAL_TERRITORIES.map((t) => `${t.key} (${t.name})`).join(", ")}.`),
+    site: z
+      .string()
+      .trim()
+      .max(500)
+      .regex(/^https?:\/\/\S+$/, "an http or https URL, like https://example.com")
+      .optional()
+      .describe("For territory `website`: the site whose look the images follow. Defaults to the workspace's website from Brand voice."),
     motif: z
       .string()
       .trim()
@@ -249,6 +262,16 @@ export const CampaignSpecSchema = z
         code: "custom",
         path: ["visual", "motif"],
         message: `a motif is physical and specific — never a screen, laptop, keyboard, monitor, dashboard or isometric diagram. To picture the product itself, use the "technical-artefact" territory.`
+      });
+    }
+    // A site is what the website world follows. On any other world it would
+    // never take effect, so it is refused, like an unknown key, rather than
+    // dropped on import.
+    if (spec.visual?.site && spec.visual.territory !== "website") {
+      ctx.addIssue({
+        code: "custom",
+        path: ["visual", "site"],
+        message: `site is for the "website" territory, whose images follow a site's look — set territory to "website", or leave site out.`
       });
     }
     const seen = new Map<string, string>();
