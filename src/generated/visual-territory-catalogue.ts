@@ -20,6 +20,12 @@ export interface TerritoryDef {
    * everywhere else the ban is what stops every campaign looking the same.
    */
   allowsInterface?: boolean;
+  /**
+   * True when only a person can pick this territory: the chooser never offers
+   * it and the fallback rotation skips it. "website" is the one — it needs a
+   * site read first (lib/site-design), which only a person names.
+   */
+  pinOnly?: boolean;
   /** What the pictures are, in a sentence. */
   essence: string;
   /** The briefs it suits. */
@@ -44,8 +50,12 @@ export const VISUAL_TERRITORIES: TerritoryDef[] = [
   { key: "geometric", name: "Abstract geometric field", essence: "Repeated forms, grids, tessellations, one deliberate break in the pattern — no objects, no screens.", suits: "Segmentation, patterns, data at scale." },
   { key: "data-physical", name: "Data made physical", essence: "Real objects sorted, stacked or arranged so they read as a chart — coins, tiles, fruit, timber — never a chart drawn by software.", suits: "Results, comparisons, attribution, pricing." },
   { key: "workshop", name: "Workshop and craft", essence: "Hands at a bench with tools and materials — carpentry, ceramics, letterpress, tailoring — the making, not the machine.", suits: "Building, customisation, agencies, services." },
-  { key: "technical-artefact", name: "Technical artefact", essence: "The product's own output treated as a designed object — a directory entry, a config line, a version tag, a release note, a label on a case — set and lit like print, never a stock screenshot of an app.", suits: "Integrations, connectors, APIs, developer products, directory listings, releases.", allowsInterface: true }
+  { key: "technical-artefact", name: "Technical artefact", essence: "The product's own output treated as a designed object — a directory entry, a config line, a version tag, a release note, a label on a case — set and lit like print, never a stock screenshot of an app.", suits: "Integrations, connectors, APIs, developer products, directory listings, releases.", allowsInterface: true },
+  { key: "website", name: "Your website", essence: "New pictures in the design language of a website a person names — its colours, type, shapes and the kind of imagery it shows — so a post reads as if it came off that site. Never a screenshot of it.", suits: "Posts that should feel like the brand's own site: launches, announcements, company and product news.", pinOnly: true }
 ];
+
+/** What the chooser may pick on its own, and what the fallback rotates through. */
+export const CHOOSABLE_TERRITORIES = VISUAL_TERRITORIES.filter((t) => !t.pinOnly);
 
 /** The motifs every campaign starts by avoiding — the ones the generator drew by default. */
 export const DEFAULT_MOTIFS_TO_AVOID: string[] = [

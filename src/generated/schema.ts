@@ -178,7 +178,10 @@ export const BriefSpecSchema = z
     segment: z.string().max(500).optional(),
     tone: z.string().max(60).optional(),
     context: z.string().max(8000).optional(),
-    language: z.enum(["en", "es"]).optional()
+    // Literal rather than imported from lib/i18n: this file is copied into the
+    // public crmcare package, which has no i18n module. languages.test.ts holds
+    // it to LOCALES.
+    language: z.enum(["en", "es", "sv"]).optional()
   })
   .strict();
 
